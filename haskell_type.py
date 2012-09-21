@@ -2,7 +2,7 @@ import sublime
 import sublime_plugin
 import re
 
-from sublime_haskell_common import call_ghcmod_and_wait
+from sublime_haskell_common import call_ghcmod_and_wait, get_cabal_project_dir_of_view
 
 # Used to find out the module name.
 MODULE_RE_STR = r'module\s+([^\s\(]*)' # "module" followed by everything that is neither " " nor "("
@@ -42,7 +42,7 @@ class HaskellShowTypeCommand(sublime_plugin.TextCommand):
         module = MODULE_RE.match(view.substr(module_region)).group(1)
 
         ghcmod_args = ['type', filename, module, str(row1), str(col1)]
-        out = call_ghcmod_and_wait(ghcmod_args)
+        out = call_ghcmod_and_wait(ghcmod_args, cwd=get_cabal_project_dir_of_view(view))
 
         if not out:
             sublime.status_message("ghc-mod %s returned nothing" % ' '.join(ghcmod_args))

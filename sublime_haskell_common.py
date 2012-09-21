@@ -93,13 +93,13 @@ def get_settings():
 def get_setting(key, default=None):
     return get_settings().get(key, default)
 
-def call_ghcmod_and_wait(arg_list):
+def call_ghcmod_and_wait(arg_list, **popen_kwargs):
     """
     Calls ghc-mod with the given arguments.
     Shows a sublime error message if ghc-mod is not available.
     """
     try:
-        exit_code, out, err = call_and_wait(['ghc-mod'] + arg_list)
+        exit_code, out, err = call_and_wait(['ghc-mod'] + arg_list, **popen_kwargs)
 
         if exit_code != 0:
             raise Exception("ghc-mod exited with status %d and stderr: %s" % (exit_code, err))
